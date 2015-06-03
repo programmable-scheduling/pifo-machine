@@ -20,3 +20,4 @@ stamp-h1
 .libs/
 *.lo
 *.o
+pifo-reference
