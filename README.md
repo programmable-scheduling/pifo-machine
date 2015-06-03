@@ -3,7 +3,7 @@
 C++ reference implementation of a Push-In First-Out Queue
 
 Build using:
-./autogen.sh
-./configure
-make
-make check
+1. ./autogen.sh
+2. ./configure
+3. make
+4. make check
