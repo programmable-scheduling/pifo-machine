@@ -26,5 +26,8 @@ AC_TYPE_UINT64_T
 AC_LANG_POP(C++)
 
 AC_CONFIG_FILES([Makefile
+		third_party/Makefile
+		third_party/gtest/Makefile
+		tests/Makefile
 ])
 AC_OUTPUT
