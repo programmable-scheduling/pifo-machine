@@ -21,3 +21,11 @@ stamp-h1
 *.lo
 *.o
 pifo-reference
+
+# Test-related
+test-driver
+tests/pifo_tests
+tests/pifo_tests.log
+tests/pifo_tests.trs
+tests/test-suite.log
+third_party/gtest/libgtest.la
