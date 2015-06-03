@@ -1,4 +1,4 @@
-#AM_CPPFLAGS = -I$(srcdir)/..
+AM_CPPFLAGS = -I$(srcdir)/..
 
 check_LTLIBRARIES = libgtest.la
 
