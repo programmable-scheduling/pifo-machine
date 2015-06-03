@@ -6,3 +6,4 @@ Build using:
 ./autogen.sh
 ./configure
 make
+make check
