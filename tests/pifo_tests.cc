@@ -2,18 +2,28 @@
 #include <iostream>
 #include "gtest/gtest.h"
 
-TEST(OmnetTests, Pifo) {
-  std::priority_queue<int> q;
+template <typename T>
+bool check_for_correctness(std::priority_queue<T> & q) {
+  auto last_element = q.top();
+  while(! q.empty()) {
+    // Every top element must be <= the previous one
+    EXPECT_LE(q.top(), last_element);
+    q.pop();
+  }
+  assert(q.empty());
+  return true;
+}
 
+TEST(PifoTests, Pifo) {
+  // Push packets into priority queue
+  std::priority_queue<int> q;
   for(const auto & n : {1,8,5,6,3,4,0,9,3,2})
     q.push(n);
 
-  // Pop out and check for correctness
-  std::vector<int> expected = {9, 8, 6, 5, 4, 3, 3, 2, 1, 0};
-  long unsigned int count = 0;
-  while(! q.empty()) {
-    EXPECT_EQ(expected.at(count), q.top());
-    q.pop();
-    count++;
-  }
+  check_for_correctness(q);
+
+  for(const auto & n : {1,1,50,60,-3,4,-1,9,-30,2})
+    q.push(n);
+
+  check_for_correctness(q);
 }
