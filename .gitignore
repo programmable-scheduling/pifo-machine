@@ -20,7 +20,7 @@ stamp-h1
 .libs/
 *.lo
 *.o
-pifo-reference
+pifo_reference
 
 # Test-related
 test-driver
