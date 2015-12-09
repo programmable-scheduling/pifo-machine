@@ -8,7 +8,7 @@ int main() {
   // Random priority generation
   std::random_device rd;
   std::mt19937 gen(rd());
-  std::uniform_int_distribution<uint32_t> prio_dis(1, 10000);
+  std::uniform_int_distribution<uint32_t> prio_dis(1, 5);
 
   // Set up one PriorityQueue
   PriorityQueue<uint32_t> priority_queue;
@@ -18,12 +18,11 @@ int main() {
 
   // Execute simulation
   for (uint32_t i = 0; i < 10000; i++) {
-    priority_queue.enq(prio_dis(gen));
     calendar_queue.enq(prio_dis(gen));
-    priority_queue.deq(i);
-    calendar_queue.deq(i);
+    std::cout << calendar_queue << std::endl;
+    auto result = calendar_queue.deq(i);
+    std::cout << "Result is initialized " << result.initialized() << std::endl;
   }
 
-  priority_queue.print();
-  calendar_queue.print();
+//  priority_queue.print();
 }
