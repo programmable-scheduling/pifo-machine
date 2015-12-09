@@ -35,7 +35,10 @@ class ElementGate {
   }
 
   /// Print element for debugging
-  void print() const { std::cout << element_ << std::endl; }
+  friend std::ostream & operator<<(std::ostream & out, const ElementGate<ElementType> & element_gate) {
+    out << element_gate.element_ << std::endl;
+    return out;
+  }
 
  private:
   /// Scheduled departure time for this element

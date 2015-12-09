@@ -1,6 +1,7 @@
 #ifndef PIFO_H_
 #define PIFO_H_
 
+#include <ostream>
 #include <iostream>
 #include <queue>
 
@@ -26,16 +27,18 @@ class PIFO {
     }
   }
 
-  /// Utility method to print queue contents
-  void print_queue() const {
+  /// print queue contents
+  friend std::ostream & operator<<(std::ostream & out, const PIFO<ElementType> & pifo) {
     // Copy priority_queue and then iterate over it
-    auto shadow_copy = queue_;
+    auto shadow_copy = pifo.queue_;
     while (not shadow_copy.empty()) {
-      std::cout << shadow_copy.top() << std::endl;
+      out << shadow_copy.top() << std::endl;
       shadow_copy.pop();
     }
-    std::cout << std::endl;
+    out << std::endl;
+    return out;
   }
+
  private:
   /// Underlying sorted array of ElementType aka. priority_queue
   std::priority_queue<ElementType> queue_ = std::priority_queue<ElementType>();

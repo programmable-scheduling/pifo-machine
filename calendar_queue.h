@@ -45,13 +45,9 @@ class CalendarQueue {
   }
 
   /// Print method
-  void print() const {
-    std::cout << "Inside PIFO ";
-    pifo_.print_queue();
-    std::cout << std::endl;
-    std::cout << "Inside element gate ";
-    element_gate_.print();
-    std::cout << std::endl;
+  friend std::ostream & operator<<(std::ostream & out, const CalendarQueue<ElementType> & calendar_queue) {
+    out << "Inside PIFO " << calendar_queue.pifo_ << std::endl << "Inside element gate " << calendar_queue.element_gate_ << std::endl;
+    return out;
   }
 
  private:
