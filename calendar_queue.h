@@ -26,21 +26,22 @@ class CalendarQueue {
   }
 
   /// Dequeue method
-  ElementType deq(const uint32_t & tick) {
+  Optional<ElementType> deq(const uint32_t & tick) {
     if (element_gate_.can_depart(tick)) {
       // Get the element from the element gate
-      auto ret = element_gate_.remove_element();
+      auto ret = element_gate_.remove_element(tick);
 
       // Find next element from the PIFO and move it into the element gate
+      // i.e. if one exists at all
       auto next = pifo_.pop();
-      element_gate_.add_element(next);
+      if (next.initialized()) element_gate_.add_element(next.get(), next.get()); // TODO: Fix this.
 
+      // Return.
       return ret;
     } else {
       std::cout << "Returning nothing \n";
-      return ElementType();
+      return Optional<ElementType>();
     }
-    // TODO: Need to change this to an optional type
   }
 
   /// Print method

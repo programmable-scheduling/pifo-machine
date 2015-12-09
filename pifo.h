@@ -4,6 +4,8 @@
 #include <iostream>
 #include <queue>
 
+#include "optional.h"
+
 template <typename ElementType>
 class PIFO {
  public:
@@ -11,14 +13,16 @@ class PIFO {
   void push(const ElementType & element) { queue_.push(element); }
 
   /// Pop and return element from the top of the PIFO
-  ElementType pop(void) {
+  Optional<ElementType> pop(void) {
     if (not queue_.empty()) {
-      auto ret = queue_.top();
+      auto top_element = queue_.top();
       queue_.pop();
+      Optional<ElementType> ret;
+      ret.set(top_element);
       return ret;
     } else {
       std::cout << "Returning empty element\n";
-      return ElementType();
+      return Optional<ElementType>();
     }
   }
 

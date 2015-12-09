@@ -10,8 +10,20 @@
 template <class T>
 class Optional {
  public:
+  /// Default constructor for Optional
+  Optional() : initialized_(false), value_(T()) {}
+
+  /// Constructor from type T
+  Optional(const T & t_value) : initialized_(true), value_(t_value) {}
+
+  /// Getter for value
   T get() const { assert(initialized_); return value_; }
+
+  /// Setter for value
   void set(T t_value) { value_ = t_value; initialized_ = true; }
+
+  /// Is it initalized
+  bool initialized() const { return initialized_; }
 
  private:
   bool initialized_ = false;

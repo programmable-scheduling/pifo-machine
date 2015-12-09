@@ -24,11 +24,14 @@ class ElementGate {
   /// Check whether element can depart?
   bool can_depart(const uint32_t & now) const { return now == dep_time_; }
 
-  /// Remove element and return it
-  ElementType remove_element(const uint32_t & now) {
-    assert(can_depart(now));
-    contains_packet_ = false;
-    return element_;
+  /// Remove element and return it, if one exists
+  Optional<ElementType> remove_element(const uint32_t & now) {
+    if (can_depart(now)) {
+      contains_packet_ = false;
+      return Optional<ElementType>(element_);
+    } else {
+      return Optional<ElementType>();
+    }
   }
 
   /// Print element for debugging

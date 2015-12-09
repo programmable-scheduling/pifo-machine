@@ -20,6 +20,8 @@ int main() {
   for (uint32_t i = 0; i < 10000; i++) {
     priority_queue.enq(prio_dis(gen));
     calendar_queue.enq(prio_dis(gen));
+    priority_queue.deq(i);
+    calendar_queue.deq(i);
   }
 
   priority_queue.print();

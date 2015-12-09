@@ -2,6 +2,7 @@
 #define PRIORITY_QUEUE_H_
 
 #include "pifo.h"
+#include "optional.h"
 
 /// The priority queue abstraction to determine
 /// the order of transmission of packets
@@ -12,7 +13,7 @@ class PriorityQueue {
   void enq(const ElementType & element) { pifo_.push(element); }
 
   /// Dequeue method
-  ElementType deq(const uint32_t & tick __attribute__((unused))) { pifo_.pop(); }
+  Optional<ElementType> deq(const uint32_t & tick __attribute__((unused))) { return pifo_.pop(); }
 
   /// Print method
   void print () const { pifo_.print_queue(); }
