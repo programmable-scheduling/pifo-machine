@@ -3,6 +3,8 @@
 
 #include "pifo.h"
 
+/// The priority queue abstraction to determine
+/// the order of transmission of packets
 template <typename ElementType>
 class PriorityQueue {
  public:

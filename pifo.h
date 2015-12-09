@@ -11,7 +11,16 @@ class PIFO {
   void push(const ElementType & element) { queue_.push(element); }
 
   /// Pop and return element from the top of the PIFO
-  ElementType pop(void) { auto ret = queue_.top(); queue_.pop(); return ret; }
+  ElementType pop(void) {
+    if (not queue_.empty()) {
+      auto ret = queue_.top();
+      queue_.pop();
+      return ret;
+    } else {
+      std::cout << "Returning empty element\n";
+      return ElementType();
+    }
+  }
 
   /// Utility method to print queue contents
   void print_queue() const {
