@@ -1,8 +1,8 @@
 #ifndef ELEMENT_GATE_H_
 #define ELEMENT_GATE_H_
 
-#include <cassert>
 #include <iostream>
+#include "assert_exception.h"
 
 /// Waiting area for a single element until it
 /// is ready to depart, used for non-work-conserving
@@ -12,7 +12,7 @@ class ElementGate {
  public:
   /// Add a single element
   void add_element(const ElementType & t_element, const uint32_t & t_dep_time) {
-    assert(not contains_packet_);
+    assert_exception(not contains_packet_);
     element_         = t_element;
     contains_packet_ = true;
     dep_time_        = t_dep_time;

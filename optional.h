@@ -1,7 +1,7 @@
 #ifndef OPTIONAL_H_
 #define OPTIONAL_H_
 
-#include <cassert>
+#include "assert_exception.h"
 
 /// Simplistic implementation of Optional types
 /// Boost's optional class is far too complicated
@@ -17,7 +17,7 @@ class Optional {
   Optional(const T & t_value) : initialized_(true), value_(t_value) {}
 
   /// Getter for value
-  T get() const { assert(initialized_); return value_; }
+  T get() const { assert_exception(initialized_); return value_; }
 
   /// Setter for value
   void set(T t_value) { value_ = t_value; initialized_ = true; }
