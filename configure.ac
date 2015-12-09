@@ -1,7 +1,7 @@
 AC_PREREQ([2.61])
-AC_INIT([pifo-reference], [0.1], [anirudh@csail.mit.edu])
+AC_INIT([pifo_reference], [0.1], [anirudh@csail.mit.edu])
 AM_INIT_AUTOMAKE([foreign subdir-objects])
-AC_CONFIG_SRCDIR([pifo-reference.cc])
+AC_CONFIG_SRCDIR([pifo_reference.cc])
 AC_CONFIG_HEADERS([config.h])
 LT_INIT
 
