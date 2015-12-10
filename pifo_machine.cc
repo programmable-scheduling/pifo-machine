@@ -5,6 +5,7 @@
 #include <random>
 
 int main() {
+  try {
   // Random priority generation
   std::random_device rd;
   std::mt19937 gen(rd());
@@ -26,4 +27,8 @@ int main() {
   }
 
 //  priority_queue.print();
+  } catch (const std::exception & e) {
+    std::cerr << "Caught exception in main " << std::endl << e.what() << std::endl;
+    return EXIT_FAILURE;
+  }
 }
