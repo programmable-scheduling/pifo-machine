@@ -18,11 +18,17 @@ class PIFO {
     if (not queue_.empty()) {
       auto top_element = queue_.top();
       queue_.pop();
-      Optional<ElementType> ret;
-      ret.set(top_element);
-      return ret;
+      return Optional<ElementType>(top_element);
     } else {
-      std::cout << "Returning empty element\n";
+      return Optional<ElementType>();
+    }
+  }
+
+  /// Get element from the top of the PIFO, but don't pop it
+  Optional<ElementType> top(void) const {
+    if (not queue_.empty()) {
+      return Optional<ElementType>(queue_.top());
+    } else {
       return Optional<ElementType>();
     }
   }
