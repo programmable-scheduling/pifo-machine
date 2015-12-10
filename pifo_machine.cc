@@ -19,7 +19,7 @@ int main() {
 
   // Execute simulation
   for (uint32_t i = 0; i < 10000; i++) {
-    calendar_queue.enq(ele_dis(gen), prio_dis(gen));
+    calendar_queue.enq(ele_dis(gen), prio_dis(gen), i);
     std::cout << calendar_queue << std::endl;
     auto result = calendar_queue.deq(i);
     std::cout << "Result is initialized " << result.initialized() << std::endl;

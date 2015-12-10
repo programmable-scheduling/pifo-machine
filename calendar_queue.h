@@ -13,7 +13,9 @@ class CalendarQueue {
   /// Enqueue method
   /// TODO: I think we should supply both an element and a priority/departure time
   /// For now, we assume the element has the priority as well.
-  void enq(const ElementType & element, const PriorityType & prio) {
+  void enq(const ElementType & element, const PriorityType & prio, const uint32_t & tick) {
+    // Don't push in a packet that was due in the past.
+    assert_exception(prio >= tick);
     pifo_.push(element, prio);
   }
 
