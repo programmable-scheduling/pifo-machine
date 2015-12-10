@@ -9,7 +9,7 @@ LT_INIT
 AC_PROG_CXX
 
 # Add picky CXXFLAGS
-CPPFLAGS="-std=c++11 -pthread"
+CPPFLAGS="-std=c++14 -pthread"
 PICKY_CXXFLAGS="-pedantic -Wconversion -Wsign-conversion -Wall -Wextra -Weffc++ -Werror -fno-default-inline"
 AC_SUBST([PICKY_CXXFLAGS])
 

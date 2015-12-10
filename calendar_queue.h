@@ -7,14 +7,14 @@
 
 /// Calendar queue abstraction to determine
 /// time of transmission of packets
-template <typename ElementType>
+template <typename ElementType, typename PriorityType>
 class CalendarQueue {
  public:
   /// Enqueue method
   /// TODO: I think we should supply both an element and a priority/departure time
   /// For now, we assume the element has the priority as well.
-  void enq(const ElementType & element) {
-    pifo_.push(element);
+  void enq(const ElementType & element, const PriorityType & prio) {
+    pifo_.push(element, prio);
   }
 
   /// Dequeue method
@@ -33,14 +33,14 @@ class CalendarQueue {
   }
 
   /// Print method
-  friend std::ostream & operator<<(std::ostream & out, const CalendarQueue<ElementType> & calendar_queue) {
+  friend std::ostream & operator<<(std::ostream & out, const CalendarQueue & calendar_queue) {
     out << calendar_queue.pifo_ << std::endl;
     return out;
   }
 
  private:
   /// Underlying PIFO
-  PIFO<ElementType> pifo_ = {};
+  PIFO<ElementType, PriorityType> pifo_ = {};
 };
 
 #endif  // CALENDAR_QUEUE_H_

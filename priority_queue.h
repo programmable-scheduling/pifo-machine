@@ -6,7 +6,7 @@
 
 /// The priority queue abstraction to determine
 /// the order of transmission of packets
-template <typename ElementType>
+template <typename ElementType, typename PriorityType>
 class PriorityQueue {
  public:
   /// Enqueue method
@@ -20,7 +20,7 @@ class PriorityQueue {
 
  private:
   /// Underlying PIFO
-  PIFO<ElementType> pifo_ = {};
+  PIFO<ElementType, PriorityType> pifo_ = {};
 };
 
 #endif  // PRIORITY_QUEUE_H_
