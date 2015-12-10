@@ -24,7 +24,7 @@ class CalendarQueue {
     // Get top of pifo
     auto top = pifo_.top();
 
-    if (top.initialized() and top.get() >= tick) {
+    if (top.initialized() and top.get() <= tick) {
       // Make sure the top element and the current time match up
       assert_exception(top.get() == tick);
       return pifo_.pop();
