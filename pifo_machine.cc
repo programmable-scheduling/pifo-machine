@@ -1,8 +1,9 @@
-#include "priority_queue.h"
-#include "calendar_queue.h"
-
 #include <iostream>
 #include <random>
+
+#include "priority_queue.h"
+#include "calendar_queue.h"
+#include "pifo_pipeline_stage.h"
 
 int main() {
   try {

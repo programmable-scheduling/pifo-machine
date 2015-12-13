@@ -13,6 +13,7 @@
 /// This mechanism of muxing the various sources into a port for each PIFOPipelineStage is the interconnect.
 /// The configuration of these muxes is handled by the compiler based on
 /// the graphviz dot file input describing the scheduling hierarchy.
+template <typename ElementType, typename PriorityType>
 class PIFOPipelineStage {
  public:
   /// Enqueue
