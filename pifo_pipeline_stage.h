@@ -3,6 +3,11 @@
 
 #include <cstdint>
 
+enum class QueueType {
+  PRIORITY_QUEUE,
+  CALENDAR_QUEUE
+};
+
 /// PIFOPipelineStage models a stage of PIFOs
 /// ---each of which can be a priority queue or a
 /// calendar queue. The constraint is that on any
@@ -19,18 +24,22 @@ class PIFOPipelineStage {
   /// Enqueue
   /// These happen externally from the ingress pipeline
   /// or from a push from a calendar queue/
-  void enq(const uint32_t & queue_id, const ElementType & element, const PriorityType & prio, const uint32_t & tick);
+  void enq(const QueueType & q_type, const uint32_t & queue_id, const ElementType & element, const PriorityType & prio, const uint32_t & tick)
+  { if (q_type == QueueType::PRIORITY_QUEUE) priority_queue_bank_.at(queue_id).enq(element, prio, tick);
+    else                                     calendar_queue_bank_.at(queue_id).enq(element, prio, tick); }
 
   /// Dequeues
   /// Happen implicitly starting from the root PIFO
-  Optional<ElementType> deq(const uint32_t & queue_id, const uint32_t & tick);
+  Optional<ElementType> deq(const QueueType & q_type, const uint32_t & queue_id, const uint32_t & tick)
+  { if (q_type == QueueType::PRIORITY_QUEUE) return priority_queue_bank_.at(queue_id).deq(tick);
+    else                                     return calendar_queue_bank_.at(queue_id).deq(tick); }
 
  private:
   /// Bank of priority queues
-  std::vector<PriorityQueue> priority_queue_bank_ = {};
+  std::vector<PriorityQueue<ElementType, PriorityType>> priority_queue_bank_ = {};
 
   /// Bank of calendar queues
-  std::vector<CalendarQueue> calendar_queue_bank_ = {};
+  std::vector<CalendarQueue<ElementType, PriorityType>> calendar_queue_bank_ = {};
 };
 
 #endif  // PIFO_PIPELINE_STAGE_H_
