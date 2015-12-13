@@ -3,24 +3,25 @@
 
 #include <iostream>
 
+#include "abstract_queue.h"
 #include "pifo.h"
 
 /// Calendar queue abstraction to determine
 /// time of transmission of packets
 template <typename ElementType, typename PriorityType>
-class CalendarQueue {
+class CalendarQueue : public AbstractQueue<ElementType, PriorityType> {
  public:
   /// Enqueue method
   /// TODO: I think we should supply both an element and a priority/departure time
   /// For now, we assume the element has the priority as well.
-  void enq(const ElementType & element, const PriorityType & prio, const uint32_t & tick) {
+  void enq(const ElementType & element, const PriorityType & prio, const uint32_t & tick) override {
     // Don't push in a packet that was due in the past.
     assert_exception(prio >= tick);
     pifo_.push(element, prio);
   }
 
   /// Dequeue method
-  Optional<ElementType> deq(const uint32_t & tick) {
+  Optional<ElementType> deq(const uint32_t & tick) override {
     // Get top of pifo
     auto top = pifo_.top();
 
