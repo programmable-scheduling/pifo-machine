@@ -37,8 +37,11 @@ class PIFOPipeline {
   /// Used to feed inputs (if required) on the next clock tick
   std::vector<Optional<uint32_t>> stage_outputs_ = {};
 
-  /// External inputs to the PIFO pipeline
-  std::vector<??> external_inputs_ = {};
+  /// External enqueue inputs to the PIFO pipeline
+  std::vector<Optional<uint32_t>> external_enq_inputs_ = {};
+
+  /// External dequeue inputs to the PIFO pipeline
+  std::vector<Optional<uint32_t>> external_deq_inputs_ = {};
 };
 
 #endif  // PIFO_PIPELINE_H_
