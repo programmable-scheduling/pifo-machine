@@ -17,18 +17,11 @@ int main() {
     // 10 priority and 10 calendar queues
     PIFOPipelineStage<uint32_t, uint32_t> pipeline_stage(10, 10);
 
-    // Set up one PriorityQueue
-    PriorityQueue<uint32_t, uint32_t> priority_queue;
-
-    // Set up one CalendarQueue
-    CalendarQueue<uint32_t, uint32_t> calendar_queue;
-
     // Execute simulation
     for (uint32_t i = 0; i < 10000; i++) {
-      priority_queue.enq(ele_dis(gen), prio_dis(gen), i);
-      std::cout << priority_queue << std::endl;
-      auto result = priority_queue.deq(i);
-      std::cout << "Result is initialized " << result.initialized() << std::endl;
+      pipeline_stage.enq(QueueType::PRIORITY_QUEUE, 0, ele_dis(gen), prio_dis(gen), i);
+      auto result = pipeline_stage.deq(QueueType::PRIORITY_QUEUE, 0, i);
+      std::cout << "Result is " << result << std::endl;
     }
 
   } catch (const std::exception & e) {

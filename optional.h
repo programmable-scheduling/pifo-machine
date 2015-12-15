@@ -1,6 +1,7 @@
 #ifndef OPTIONAL_H_
 #define OPTIONAL_H_
 
+#include <ostream>
 #include "assert_exception.h"
 
 /// Simplistic implementation of Optional types
@@ -24,6 +25,12 @@ class Optional {
 
   /// Is it initalized
   bool initialized() const { return initialized_; }
+
+  /// Stream insertion operator
+  friend std::ostream & operator<<(std::ostream & out, const Optional & optional) {
+    out << "Optional initialized?: " << optional.initialized_ << " value " << optional.value_;
+    return out;
+  }
 
  private:
   bool initialized_ = false;

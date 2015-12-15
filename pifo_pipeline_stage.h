@@ -37,6 +37,7 @@ class PIFOPipelineStage {
   { if (q_type == QueueType::PRIORITY_QUEUE) return priority_queue_bank_.at(queue_id).deq(tick);
     else                                     return calendar_queue_bank_.at(queue_id).deq(tick); }
 
+  /// Overload stream insertion operator
  private:
   /// Bank of priority queues
   std::vector<PriorityQueue<ElementType, PriorityType>> priority_queue_bank_ = {};
