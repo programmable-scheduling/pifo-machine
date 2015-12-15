@@ -13,6 +13,10 @@ int main() {
     std::uniform_int_distribution<uint32_t> prio_dis(1, 5);
     std::uniform_int_distribution<uint32_t> ele_dis(1, 5);
 
+    // Single PIFO pipeline stage consisting of
+    // 10 priority and 10 calendar queues
+    PIFOPipelineStage<uint32_t, uint32_t> pipeline_stage(10, 10);
+
     // Set up one PriorityQueue
     PriorityQueue<uint32_t, uint32_t> priority_queue;
 

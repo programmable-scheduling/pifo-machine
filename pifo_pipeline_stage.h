@@ -21,6 +21,9 @@ enum class QueueType {
 template <typename ElementType, typename PriorityType>
 class PIFOPipelineStage {
  public:
+  /// Constructor for PIFOPipelineStage
+  PIFOPipelineStage(const uint32_t & num_prio_queues, const uint32_t & num_cal_queues) : priority_queue_bank_(num_prio_queues), calendar_queue_bank_(num_cal_queues) {}
+
   /// Enqueue
   /// These happen externally from the ingress pipeline
   /// or from a push from a calendar queue/

@@ -3,8 +3,8 @@
 
 enum class InputSource {
   EXTERNAL_INPUT,
-
-
+  PREVIOUS_STAGE,
+  NEXT_STAGE,
 };
 
 class PIFOPipeline {
@@ -29,10 +29,6 @@ class PIFOPipeline {
   /// i.e. where do deq inputs come from?
   std::vector<InputSource> stage_deq_input_src = {};
 
-/// These three std::vectors above are constructed from the graphviz dot
-/// file when the PIFO machine is set up once at the beginning of the sim.
-
-
   /// Scratchpad for outputs from each of the stages
   /// Used to feed inputs (if required) on the next clock tick
   std::vector<Optional<uint32_t>> stage_outputs_ = {};
@@ -43,5 +39,8 @@ class PIFOPipeline {
   /// External dequeue inputs to the PIFO pipeline
   std::vector<Optional<uint32_t>> external_deq_inputs_ = {};
 };
+
+/// These three std::vectors above are constructed from the graphviz dot
+/// file when the PIFO machine is set up once at the beginning of the sim.
 
 #endif  // PIFO_PIPELINE_H_
