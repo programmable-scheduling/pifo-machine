@@ -38,6 +38,20 @@ class PIFOPipelineStage {
     else                                     return calendar_queue_bank_.at(queue_id).deq(tick); }
 
   /// Overload stream insertion operator
+  friend std::ostream & operator<<(std::ostream & out, const PIFOPipelineStage & pipe_stage) {
+    out << "Priority Queues: " << std::endl;
+    for (uint32_t i = 0; i < pipe_stage.priority_queue_bank_.size(); i++) {
+      out << "Index " << i << pipe_stage.priority_queue_bank_.at(i) << std::endl;
+    }
+
+    out << "Calendar Queues: " << std::endl;
+    for (uint32_t i = 0; i < pipe_stage.calendar_queue_bank_.size(); i++) {
+      out << "Index " << i << pipe_stage.calendar_queue_bank_.at(i) << std::endl;
+    }
+
+    return out;
+  }
+
  private:
   /// Bank of priority queues
   std::vector<PriorityQueue<ElementType, PriorityType>> priority_queue_bank_ = {};

@@ -21,7 +21,6 @@ class PriorityQueue {
     return out;
   }
 
-
  private:
   /// Underlying PIFO
   PIFO<ElementType, PriorityType> pifo_ = {};
