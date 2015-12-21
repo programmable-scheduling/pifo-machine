@@ -1,6 +1,6 @@
 [![Build Status](https://travis-ci.org/anirudhSK/pifo-reference.svg)](https://travis-ci.org/anirudhSK/pifo-reference)
 
-C++ reference implementation of a Push-In First-Out Queue
+C++ reference implementation of a pipeline of Push-In First-Out Queues
 
 Build using:
 
