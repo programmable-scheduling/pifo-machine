@@ -6,14 +6,13 @@
 #include "pifo.h"
 
 /// Calendar queue abstraction to determine
-/// time of transmission of packets
+/// absolute time of transmission of packets
 template <typename ElementType, typename PriorityType>
 class CalendarQueue {
  public:
   /// Enqueue method
-  /// TODO: I think we should supply both an element and a priority/departure time
-  /// For now, we assume the element has the priority as well.
-  void enq(const ElementType & element, const PriorityType & prio, const uint32_t & tick) {
+  void enq(const ElementType & element, const PriorityType & prio,
+           const uint32_t & tick) {
     // Don't push in a packet that was due in the past.
     assert_exception(prio >= tick);
     pifo_.push(element, prio);
@@ -25,18 +24,21 @@ class CalendarQueue {
     auto top = pifo_.top();
 
     if (top.initialized() and top.get() <= tick) {
-      // Make sure the top element and the current time match up
+      // If top element's tick is less than current time,
+      // assert that the top element and the current time match up
       assert_exception(top.get() == tick);
       return pifo_.pop();
     } else {
+      // Otherwise, return nothing
       std::cout << "Returning nothing \n";
       return Optional<ElementType>();
     }
   }
 
-  /// Print method
-  friend std::ostream & operator<<(std::ostream & out, const CalendarQueue & calendar_queue) {
-    out << calendar_queue.pifo_ << std::endl;
+  /// Print method / stream insertion operator
+  friend std::ostream & operator<<(std::ostream & out,
+                                   const CalendarQueue & calendar_queue) {
+    out << calendar_queue.pifo_;
     return out;
   }
 

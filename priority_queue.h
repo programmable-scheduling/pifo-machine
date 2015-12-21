@@ -10,14 +10,20 @@ template <typename ElementType, typename PriorityType>
 class PriorityQueue {
  public:
   /// Enqueue method
-  void enq(const ElementType & element, const PriorityType & prio, const uint32_t & tick __attribute__((unused))) { pifo_.push(element, prio); }
+  void enq(const ElementType & element, const PriorityType & prio,
+           const uint32_t & tick __attribute__((unused))) {
+    pifo_.push(element, prio);
+  }
 
   /// Dequeue method
-  Optional<ElementType> deq(const uint32_t & tick __attribute__((unused))) { return pifo_.pop(); }
+  Optional<ElementType> deq(const uint32_t & tick __attribute__((unused))) {
+    return pifo_.pop();
+  }
 
-  /// Print method
-  friend std::ostream & operator<<(std::ostream & out, const PriorityQueue & priority_queue) {
-    out << priority_queue.pifo_ << std::endl;
+  /// Print method / stream insertion operator
+  friend std::ostream & operator<<(std::ostream & out,
+                                   const PriorityQueue & priority_queue) {
+    out << priority_queue.pifo_;
     return out;
   }
 
