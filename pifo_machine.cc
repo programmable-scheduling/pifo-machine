@@ -18,11 +18,12 @@ int main() {
     // Execute simulation
     for (uint32_t i = 0; i < 10000; i++) {
       pipeline_stage.enq(QueueType::PRIORITY_QUEUE, 0, ele_dis(gen), i);
-      auto result = pipeline_stage.deq(QueueType::PRIORITY_QUEUE, 0, i);
-      std::cout << "Result is " << result << std::endl;
-      std::cout << "Pipeline stage contents " << pipeline_stage << std::endl;
+      std::cout << pipeline_stage << std::endl;
+      if (i % 5 == 0) {
+        auto result = pipeline_stage.deq(QueueType::PRIORITY_QUEUE, 0, i);
+        std::cout << "Deq result is \"" << result << "\"" << std::endl;
+      }
     }
-
   } catch (const std::exception & e) {
     std::cerr << "Caught exception in main " << std::endl << e.what() << std::endl;
     return EXIT_FAILURE;
