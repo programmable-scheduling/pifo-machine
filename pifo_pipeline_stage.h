@@ -57,9 +57,13 @@ class PIFOPipelineStage {
 
   /// Constructor for PIFOPipelineStage with a number of prio. and cal. qs
   PIFOPipelineStage(const uint32_t & num_prio_queues,
-                    const uint32_t & num_cal_queues)
+                    const uint32_t & num_cal_queues,
+                    const std::initializer_list<std::pair<const ElementType, NextHop>> & lut_initializer,
+                    const std::function<PriorityType(ElementType)> & t_prio_computer)
       : priority_queue_bank_(num_prio_queues),
-        calendar_queue_bank_(num_cal_queues) {}
+        calendar_queue_bank_(num_cal_queues),
+        next_hop_lut_(lut_initializer),
+        prio_computer_(t_prio_computer) {}
 
   /// Enqueue
   /// These happen externally from the ingress pipeline
@@ -119,7 +123,7 @@ class PIFOPipelineStage {
 
   /// Function object to compute incoming element's priority
   /// Identity function by default
-  const std::function<PriorityType(ElementType)> prio_computer_ = [] (const auto & x) { return x; };
+  const std::function<PriorityType(ElementType)> prio_computer_ = {};
 };
 
 #endif  // PIFO_PIPELINE_STAGE_H_

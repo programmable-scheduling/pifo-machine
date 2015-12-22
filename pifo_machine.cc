@@ -8,12 +8,12 @@ int main() {
     // Random priority generation
     std::random_device rd;
     std::mt19937 gen(rd());
-    std::uniform_int_distribution<uint32_t> prio_dis(1, 5);
     std::uniform_int_distribution<uint32_t> ele_dis(1, 5);
 
     // Single PIFO pipeline stage consisting of
-    // 10 priority and 10 calendar queues
-    PIFOPipelineStage<uint32_t, uint32_t> pipeline_stage(10, 10);
+    // 1 priority and 0 calendar queues
+    typedef PIFOPipelineStage<uint32_t, uint32_t> StageType;
+    StageType pipeline_stage(1, 0, {}, [] (const auto & x) { return x; });
 
     // Execute simulation
     for (uint32_t i = 0; i < 10000; i++) {
