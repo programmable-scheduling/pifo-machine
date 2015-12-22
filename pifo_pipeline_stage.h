@@ -65,15 +65,14 @@ class PIFOPipelineStage {
   /// These happen externally from the ingress pipeline
   /// or from a push from a calendar queue/
   void enq(const QueueType & q_type, const uint32_t & queue_id,
-           const ElementType & element, const PriorityType & prio,
-           const uint32_t & tick) {
-    const auto transformed = prio_computer_(PushableElementType(element, prio));
+           const ElementType & element, const uint32_t & tick) {
+    const auto prio = prio_computer_(element);
     if (q_type == QueueType::PRIORITY_QUEUE) {
-      priority_queue_bank_.at(queue_id).enq(transformed.element_,
-                                            transformed.prio_, tick);
+      priority_queue_bank_.at(queue_id).enq(element,
+                                            prio, tick);
     } else {
-      calendar_queue_bank_.at(queue_id).enq(transformed.element_,
-                                            transformed.prio_, tick);
+      calendar_queue_bank_.at(queue_id).enq(element,
+                                            prio, tick);
     }
   }
 
@@ -120,7 +119,7 @@ class PIFOPipelineStage {
 
   /// Function object to compute incoming element's priority
   /// Identity function by default
-  const std::function<PushableElementType(PushableElementType)> prio_computer_ = [] (const auto & x) { return x; };
+  const std::function<PriorityType(ElementType)> prio_computer_ = [] (const auto & x) { return x; };
 };
 
 #endif  // PIFO_PIPELINE_STAGE_H_

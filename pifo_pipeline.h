@@ -57,7 +57,6 @@ class PIFOPipeline {
       stages_.at(next_hop).enq(next_hop.q_type,
                                next_hop.queue_id,
                                ret.value,
-                               -1, // Don't care value
                                tick);
       return Optional<ElementType>();
     } else {

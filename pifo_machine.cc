@@ -17,7 +17,7 @@ int main() {
 
     // Execute simulation
     for (uint32_t i = 0; i < 10000; i++) {
-      pipeline_stage.enq(QueueType::PRIORITY_QUEUE, 0, ele_dis(gen), prio_dis(gen), i);
+      pipeline_stage.enq(QueueType::PRIORITY_QUEUE, 0, ele_dis(gen), i);
       auto result = pipeline_stage.deq(QueueType::PRIORITY_QUEUE, 0, i);
       std::cout << "Result is " << result << std::endl;
       std::cout << "Pipeline stage contents " << pipeline_stage << std::endl;
