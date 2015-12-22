@@ -21,12 +21,12 @@ class CalendarQueue {
   /// Dequeue method
   Optional<ElementType> deq(const uint32_t & tick) {
     // Get top of pifo
-    auto top = pifo_.top();
+    auto top_prio = pifo_.top_prio();
 
-    if (top.initialized() and top.get() <= tick) {
+    if (top_prio.initialized() and top_prio.get() <= tick) {
       // If top element's tick is less than current time,
       // assert that the top element and the current time match up
-      assert_exception(top.get() == tick);
+      assert_exception(top_prio.get() == tick);
       return pifo_.pop();
     } else {
       // Otherwise, return nothing

@@ -58,12 +58,12 @@ class PIFO {
     }
   }
 
-  /// Get element from the top of the PIFO, but don't pop it
-  Optional<ElementType> top(void) const {
+  /// Get the top-most priority from the PIFO, but don't pop it
+  Optional<PriorityType> top_prio(void) const {
     if (not queue_.empty()) {
-      return Optional<ElementType>(queue_.top().element_);
+      return Optional<PriorityType>(queue_.top().prio_);
     } else {
-      return Optional<ElementType>();
+      return Optional<PriorityType>();
     }
   }
 
