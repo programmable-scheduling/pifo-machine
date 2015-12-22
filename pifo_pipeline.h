@@ -10,7 +10,6 @@ class PIFOPipeline {
  public:
   typedef PIFOPipelineStage<ElementType, PriorityType> StageType;
 
-
   /// Constructor for the PIFOPipeline from an std::initializer_list
   PIFOPipeline(const std::initializer_list<StageType> & t_pipeline_stages)
       : PIFOPipeline(std::vector<StageType>(t_pipeline_stages)) {}
@@ -27,9 +26,8 @@ class PIFOPipeline {
            const QueueType & q_type,
            const uint32_t & queue_id,
            const ElementType & element,
-           const PriorityType & prio,
            const uint32_t & tick) {
-    stages_.at(stage_id).enq(q_type, queue_id, element, prio, tick);
+    stages_.at(stage_id).enq(q_type, queue_id, element, tick);
   }
 
   /// Dequeues from the pipeline at every tick
@@ -48,15 +46,21 @@ class PIFOPipeline {
     Optional<ElementType> ret;
     while (next_hop.op == Operation::DEQ) {
       ret = stages_.at(next_hop.stage_id).deq(next_hop.q_type, next_hop.queue_id, tick);
-      next_hop = stages_.at(next_hop.stage_id).find_next_hop(ret);
+      // Check that ret is initialized.
+      if (ret.initialized()) {
+        next_hop = stages_.at(next_hop.stage_id).find_next_hop(ret);
+      } else {
+        return ret;
+      }
     }
 
     // Handle loop termination appropriately
+    assert_exception(ret.initialized());
     if (next_hop.op == Operation::ENQ) {
       // This only happens if a calendar queue pushes into the next stage
       stages_.at(next_hop).enq(next_hop.q_type,
                                next_hop.queue_id,
-                               ret.value,
+                               ret.get(),
                                tick);
       return Optional<ElementType>();
     } else {
