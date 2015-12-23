@@ -29,13 +29,10 @@ enum class Operation {
   TRANSMIT
 };
 
-/// Next hop information, what operation, which stage,
-/// which queue type and which queue id should we be
-/// sending this PIFOPacket to?
-struct NextHop {
-  /// Operation: ENQ/DEQ/TRANSMIT
-  Operation op;
-
+/// Arguments to enqueue or dequeue
+/// from a particular stage
+/// in the PIFO pipeline
+struct PIFOArguments {
   /// Which stage to enqueue or dequeue from
   uint32_t  stage_id;
 
@@ -44,6 +41,19 @@ struct NextHop {
 
   /// Queue id to enqueue or dequeue from
   uint32_t  queue_id;
+};
+
+/// Next hop information, what operation, which stage,
+/// which queue type and which queue id should we be
+/// sending this PIFOPacket to?
+struct NextHop {
+  /// Operation: ENQ/DEQ/TRANSMIT
+  Operation op;
+
+  /// Vector of PIFOArguments
+  /// We use a vector because for an Operation::ENQ,
+  /// we might need to insert it into multiple stages
+  std::vector<PIFOArguments> pifo_arguments;
 };
 
 /// Simple look-up table to look-up a packet's next hop.
@@ -57,7 +67,7 @@ class LookUpTable {
         look_up_table_(lut_init) {}
 
   /// Lookup a PIFOPacket in a LookUpTable using a specific field name
-  NextHop lookup(const PIFOPacket & packet) const { return look_up_table_.at(packet(look_up_field_name_)); }
+  auto lookup(const PIFOPacket & packet) const { return look_up_table_.at(packet(look_up_field_name_)); }
 
  private:
   /// Field name to use for lookup
@@ -134,7 +144,7 @@ class PIFOPipelineStage {
   }
 
   /// Find "next hop" after a dequeue
-  NextHop find_next_hop(const PIFOPacket & packet) const { return next_hop_lut_.lookup(packet); }
+  auto find_next_hop(const PIFOPacket & packet) const { return next_hop_lut_.lookup(packet); }
 
  private:
   /// Bank of priority queues

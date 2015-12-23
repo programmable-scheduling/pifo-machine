@@ -35,17 +35,22 @@ class PIFOPipeline {
                            const uint32_t & queue_id,
                            const uint32_t & tick) {
     // Start off with a dequeue operation to the specified stage_id
-    NextHop next_hop = {Operation::DEQ, stage_id, q_type, queue_id};
+    NextHop next_hop = {Operation::DEQ, {{stage_id, q_type, queue_id}}};
 
     // Keep dequeuing until the next operation is either
     // an Operation::ENQ (push from prio q.) or
     // an Operation::TRANSMIT (reached a packet, transmit it)
     Optional<PIFOPacket> ret;
     while (next_hop.op == Operation::DEQ) {
-      ret = stages_.at(next_hop.stage_id).deq(next_hop.q_type, next_hop.queue_id, tick);
+      // Make sure there is only one pifo argument if the op is a DEQ
+      assert_exception(next_hop.pifo_arguments.size() == 1);
+
+      // Get single pifo argument
+      const auto pifo_args = next_hop.pifo_arguments.front();
+      ret = stages_.at(pifo_args.stage_id).deq(pifo_args.q_type, pifo_args.queue_id, tick);
       // Check that ret is initialized.
       if (ret.initialized()) {
-        next_hop = stages_.at(next_hop.stage_id).find_next_hop(ret.get());
+        next_hop = stages_.at(pifo_args.stage_id).find_next_hop(ret.get());
       } else {
         return ret;
       }
@@ -55,10 +60,13 @@ class PIFOPipeline {
     assert_exception(ret.initialized());
     if (next_hop.op == Operation::ENQ) {
       // This only happens if a calendar queue pushes into the next stage
-      stages_.at(next_hop.stage_id).enq(next_hop.q_type,
-                                        next_hop.queue_id,
-                                        ret.get(),
-                                        tick);
+      for (uint32_t i = 0; i < next_hop.pifo_arguments.size(); i++) {
+        const auto pifo_args = next_hop.pifo_arguments.at(i);
+        stages_.at(pifo_args.stage_id).enq(pifo_args.q_type,
+                                           pifo_args.queue_id,
+                                           ret.get(),
+                                           tick);
+      }
       return Optional<PIFOPacket>();
     } else {
       // This is when we have finally reached a packet, which needs to

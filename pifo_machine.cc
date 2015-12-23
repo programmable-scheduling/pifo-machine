@@ -4,20 +4,6 @@
 #include "pifo_pipeline_stage.h"
 #include "pifo_pipeline.h"
 
-struct Packet {
-  /// Fields
-  int fid = 0;
-
-  /// Stream insertion operator to print PIFO contents when it contains a Packet
-  friend std::ostream & operator<<(std::ostream & out, const Packet & packet) {
-    out << packet.fid;
-    return out;
-  }
-
-  /// Override less-than operator because Packet needs to be part of a std::map
-  bool operator<(const Packet & other) const { return fid < other.fid; }
-};
-
 int main() {
   try {
     // Random priority generation
@@ -30,7 +16,7 @@ int main() {
     PIFOPipeline pipeline({PIFOPipelineStage(1,
                                              0,
                                              "fid",
-                                             {{0, {Operation::TRANSMIT, 0, QueueType::PRIORITY_QUEUE, 0}}},
+                                             {{0, {Operation::TRANSMIT, {{0, QueueType::PRIORITY_QUEUE, 0}}}}},
                                              [] (const auto & x) { return x("fid"); })});
 
     // Execute simulation
