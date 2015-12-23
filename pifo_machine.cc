@@ -2,10 +2,11 @@
 #include <random>
 
 #include "pifo_pipeline_stage.h"
+#include "pifo_pipeline.h"
 
 struct Packet {
   /// Fields
-  int fid;
+  int fid = 0;
 
   /// Stream insertion operator to print PIFO contents when it contains a Packet
   friend std::ostream & operator<<(std::ostream & out, const Packet & packet) {
@@ -27,14 +28,15 @@ int main() {
     // Single PIFO pipeline stage consisting of
     // 1 priority and 0 calendar queues
     typedef PIFOPipelineStage<Packet, uint32_t> StageType;
-    StageType pipeline_stage(1, 0, {}, [] (const auto & x) { return x.fid; });
+    typedef PIFOPipeline<Packet, uint32_t> PipelineType;
+    PipelineType pipeline({StageType(1, 0, {{Packet(), {Operation::TRANSMIT, 0, QueueType::PRIORITY_QUEUE, 0}}}, [] (const auto & x) { return x.fid; })});
 
     // Execute simulation
     for (uint32_t i = 0; i < 10000; i++) {
-      pipeline_stage.enq(QueueType::PRIORITY_QUEUE, 0, Packet(), i);
-      std::cout << pipeline_stage << std::endl;
+      pipeline.enq(0, QueueType::PRIORITY_QUEUE, 0, Packet(), i);
+      std::cout << pipeline << std::endl;
       if (i % 5 == 0) {
-        auto result = pipeline_stage.deq(QueueType::PRIORITY_QUEUE, 0, i);
+        auto result = pipeline.deq(0, QueueType::PRIORITY_QUEUE, 0, i);
         std::cout << "Deq result is \"" << result << "\"" << std::endl;
       }
     }
