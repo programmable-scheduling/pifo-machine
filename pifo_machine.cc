@@ -27,13 +27,15 @@ int main() {
 
     // Single PIFO pipeline stage consisting of
     // 1 priority and 0 calendar queues
-    typedef PIFOPipelineStage<Packet, uint32_t> StageType;
-    typedef PIFOPipeline<Packet, uint32_t> PipelineType;
-    PipelineType pipeline({StageType(1, 0, {{Packet(), {Operation::TRANSMIT, 0, QueueType::PRIORITY_QUEUE, 0}}}, [] (const auto & x) { return x.fid; })});
+    PIFOPipeline pipeline({PIFOPipelineStage(1,
+                                             0,
+                                             "fid",
+                                             {{0, {Operation::TRANSMIT, 0, QueueType::PRIORITY_QUEUE, 0}}},
+                                             [] (const auto & x) { return x("fid"); })});
 
     // Execute simulation
     for (uint32_t i = 0; i < 10000; i++) {
-      pipeline.enq(0, QueueType::PRIORITY_QUEUE, 0, Packet(), i);
+      pipeline.enq(0, QueueType::PRIORITY_QUEUE, 0, PIFOPacket(), i);
       std::cout << pipeline << std::endl;
       if (i % 5 == 0) {
         auto result = pipeline.deq(0, QueueType::PRIORITY_QUEUE, 0, i);
