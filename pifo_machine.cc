@@ -14,7 +14,6 @@ int main() {
     // Single PIFO pipeline stage consisting of
     // 1 priority and 0 calendar queues
     PIFOPipeline pipeline({PIFOPipelineStage(1,
-                                             0,
                                              "fid",
                                              {{0, {Operation::TRANSMIT, {{0, QueueType::PRIORITY_QUEUE, 0}}}}},
                                              [] (const auto & x) { return x("fid"); })});

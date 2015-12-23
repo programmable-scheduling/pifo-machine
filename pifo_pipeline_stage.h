@@ -91,12 +91,11 @@ class PIFOPipelineStage {
 
   /// Constructor for PIFOPipelineStage with a number of prio. and cal. qs
   PIFOPipelineStage(const uint32_t & num_prio_queues,
-                    const uint32_t & num_cal_queues,
                     const std::string & lut_field_name,
                     const std::initializer_list<std::pair<const int, NextHop>> & lut_initializer,
                     const std::function<priority_t(PIFOPacket)> & t_prio_computer)
       : priority_queue_bank_(num_prio_queues),
-        calendar_queue_bank_(num_cal_queues),
+        calendar_queue_(),
         next_hop_lut_(lut_field_name, lut_initializer),
         prio_computer_(t_prio_computer) {}
 
@@ -110,8 +109,7 @@ class PIFOPipelineStage {
       priority_queue_bank_.at(queue_id).enq(packet,
                                             prio, tick);
     } else {
-      calendar_queue_bank_.at(queue_id).enq(packet,
-                                            prio, tick);
+      calendar_queue_.enq(packet, prio, tick);
     }
   }
 
@@ -122,7 +120,7 @@ class PIFOPipelineStage {
     if (q_type == QueueType::PRIORITY_QUEUE) {
       return priority_queue_bank_.at(queue_id).deq(tick);
     } else {
-      return calendar_queue_bank_.at(queue_id).deq(tick);
+      return calendar_queue_.deq(tick);
     }
   }
 
@@ -134,10 +132,9 @@ class PIFOPipelineStage {
       out << "Index " << i << " " << pipe_stage.priority_queue_bank_.at(i) << std::endl;
     }
 
-    out << "Calendar Queues: " << std::endl;
-    for (uint32_t i = 0; i < pipe_stage.calendar_queue_bank_.size(); i++) {
-      out << "Index " << i << " " << pipe_stage.calendar_queue_bank_.at(i) << std::endl;
-    }
+    out << "Calendar Queue: " << std::endl;
+    out << pipe_stage.calendar_queue_ << std::endl;
+
     out << "End of contents of PIFOPipelineStage " << std::endl;
 
     return out;
@@ -150,8 +147,8 @@ class PIFOPipelineStage {
   /// Bank of priority queues
   std::vector<PriorityQueue<PIFOPacket, priority_t>> priority_queue_bank_;
 
-  /// Bank of calendar queues
-  std::vector<CalendarQueue<PIFOPacket, priority_t>> calendar_queue_bank_;
+  /// Single calendar queue
+  CalendarQueue<PIFOPacket, priority_t> calendar_queue_;
 
   /// look-up table to find the next hop
   const LookUpTable next_hop_lut_;
