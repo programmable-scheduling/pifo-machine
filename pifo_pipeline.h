@@ -38,7 +38,7 @@ class PIFOPipeline {
                             const uint32_t & queue_id,
                             const uint32_t & tick) {
     // Start off with a dequeue operation to the specified stage_id
-    auto next_hop = {Operation::DEQ, stage_id, q_type, queue_id};
+    NextHop next_hop = {Operation::DEQ, stage_id, q_type, queue_id};
 
     // Keep dequeuing until the next operation is either
     // an Operation::ENQ (push from prio q.) or
@@ -48,7 +48,7 @@ class PIFOPipeline {
       ret = stages_.at(next_hop.stage_id).deq(next_hop.q_type, next_hop.queue_id, tick);
       // Check that ret is initialized.
       if (ret.initialized()) {
-        next_hop = stages_.at(next_hop.stage_id).find_next_hop(ret);
+        next_hop = stages_.at(next_hop.stage_id).find_next_hop(ret.get());
       } else {
         return ret;
       }
@@ -58,10 +58,10 @@ class PIFOPipeline {
     assert_exception(ret.initialized());
     if (next_hop.op == Operation::ENQ) {
       // This only happens if a calendar queue pushes into the next stage
-      stages_.at(next_hop).enq(next_hop.q_type,
-                               next_hop.queue_id,
-                               ret.get(),
-                               tick);
+      stages_.at(next_hop.stage_id).enq(next_hop.q_type,
+                                        next_hop.queue_id,
+                                        ret.get(),
+                                        tick);
       return Optional<ElementType>();
     } else {
       // This is when we have finally reached a packet, which needs to
