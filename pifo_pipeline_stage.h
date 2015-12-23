@@ -60,9 +60,9 @@ struct NextHop {
 /// Takes as input a packet field name as a string
 /// and a std::map that determines the next-hop based on that
 /// field name. TODO: We assume all fields are ints
-class LookUpTable {
+class NextHopLookupTable {
  public:
-  LookUpTable(const std::string & lut_field_name, const std::initializer_list<std::pair<const int, NextHop>> & lut_init)
+  NextHopLookupTable(const std::string & lut_field_name, const std::initializer_list<std::pair<const int, NextHop>> & lut_init)
       : look_up_field_name_(lut_field_name),
         look_up_table_(lut_init) {}
 
@@ -151,7 +151,7 @@ class PIFOPipelineStage {
   CalendarQueue<PIFOPacket, priority_t> calendar_queue_;
 
   /// look-up table to find the next hop
-  const LookUpTable next_hop_lut_;
+  const NextHopLookupTable next_hop_lut_;
 
   /// Function object to compute incoming packet's priority
   /// Identity function by default
