@@ -71,6 +71,15 @@ class PIFOPipeline {
     }
   }
 
+  /// Overload stream insertion operator
+  friend std::ostream & operator<<(std::ostream & out, const PIFOPipeline & t_pipeline) {
+    out << "Contents of PIFOPipeline " << std::endl;
+    for (uint32_t i = 0; i < t_pipeline.stages_.size(); i++) {
+      out << "Stage " << i << " " << t_pipeline.stages_.at(i);
+    }
+    return out;
+  }
+
  private:
   /// Bank of pipeline stages
   std::vector<StageType> stages_        = {};
