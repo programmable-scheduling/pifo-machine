@@ -25,7 +25,9 @@ struct PushableElement {
   }
 
   /// Override the less-than operator for std::priority_queue to work
-  bool operator<(const PushableElement<ElementType, PriorityType> & other) const { return prio_ < other.prio_; }
+  /// N.B. higher priorities have lower absolute values, which is why the comparison is inverted.
+  /// Put differently, we have a min-heap, not a max heap
+  bool operator<(const PushableElement<ElementType, PriorityType> & other) const { return prio_ >= other.prio_; }
 
   /// Element itself
   ElementType element_ = ElementType();
