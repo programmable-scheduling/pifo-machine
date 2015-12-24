@@ -104,6 +104,8 @@ class PIFOPipelineStage {
   /// or from a push from a calendar queue/
   void enq(const QueueType & q_type, const uint32_t & queue_id,
            const PIFOPacket & packet, const uint32_t & tick) {
+    num_enq_ops++;
+    assert_exception(num_enq_ops == 1);
     const auto prio = prio_computer_(packet);
     if (q_type == QueueType::PRIORITY_QUEUE) {
       priority_queue_bank_.at(queue_id).enq(packet,
@@ -111,17 +113,21 @@ class PIFOPipelineStage {
     } else {
       calendar_queue_.enq(packet, prio, tick);
     }
+    num_enq_ops = 0;
   }
 
   /// Dequeues
   /// Happen implicitly starting from the root PIFO
   Optional<PIFOPacket> deq(const QueueType & q_type, const uint32_t & queue_id,
                             const uint32_t & tick) {
+    num_deq_ops++;
+    assert_exception(num_deq_ops == 1);
     if (q_type == QueueType::PRIORITY_QUEUE) {
       return priority_queue_bank_.at(queue_id).deq(tick);
     } else {
       return calendar_queue_.deq(tick);
     }
+    num_deq_ops = 0;
   }
 
   /// Overload stream insertion operator
@@ -156,6 +162,12 @@ class PIFOPipelineStage {
   /// Function object to compute incoming packet's priority
   /// Identity function by default
   const std::function<priority_t(PIFOPacket)> prio_computer_;
+
+  /// Count the number of enq ops on this stage every clock tick
+  uint32_t num_enq_ops = 0;
+
+  /// Count the number of deq ops on this stage every clock tick
+  uint32_t num_deq_ops = 0;
 };
 
 #endif  // PIFO_PIPELINE_STAGE_H_
