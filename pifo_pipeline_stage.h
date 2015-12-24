@@ -126,15 +126,16 @@ class PIFOPipelineStage {
   /// Dequeues
   /// Happen implicitly starting from the root PIFO
   Optional<PIFOPacket> deq(const QueueType & q_type, const uint32_t & queue_id,
-                            const uint32_t & tick) {
+                           const uint32_t & tick) {
     num_deq_ops++;
     assert_exception(num_deq_ops == 1);
     if (q_type == QueueType::PRIORITY_QUEUE) {
+      num_deq_ops = 0;
       return priority_queue_bank_.at(queue_id).deq(tick);
     } else {
+      num_deq_ops = 0;
       return calendar_queue_.deq(tick);
     }
-    num_deq_ops = 0;
   }
 
   /// Overload stream insertion operator
