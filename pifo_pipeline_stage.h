@@ -67,7 +67,14 @@ class NextHopLookupTable {
         look_up_table_(lut_init) {}
 
   /// Lookup a PIFOPacket in a LookUpTable using a specific field name
-  auto lookup(const PIFOPacket & packet) const { return look_up_table_.at(packet(look_up_field_name_)); }
+  auto lookup(const PIFOPacket & packet) const {
+    if (look_up_table_.find(packet(look_up_field_name_)) == look_up_table_.end()) {
+      throw std::logic_error("Field named " + look_up_field_name_ +
+                             " does not have an entry with value " + std::to_string(packet(look_up_field_name_)) +
+                             " in NextHopLookupTable");
+    }
+    return look_up_table_.at(packet(look_up_field_name_));
+  }
 
  private:
   /// Field name to use for lookup
@@ -147,7 +154,9 @@ class PIFOPipelineStage {
   }
 
   /// Find "next hop" after a dequeue
-  auto find_next_hop(const PIFOPacket & packet) const { return next_hop_lut_.lookup(packet); }
+  auto find_next_hop(const PIFOPacket & packet) const {
+    return next_hop_lut_.lookup(packet);
+  }
 
  private:
   /// Bank of priority queues
