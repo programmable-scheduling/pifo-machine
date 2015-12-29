@@ -1,0 +1,38 @@
+digraph sched_graph {
+node [shape = box style="rounded,filled"];
+root [label =
+"pifo_root:
+if pkt.class_id in finish_times:
+  p.start = max(virtual_time, finish_times[pkt.class_id]);
+else:
+  p.start = virtual_time
+finish_times[pkt.class_id] = p.start + p.len / p.weight;
+pkt.prio = p.start
+"
+fillcolor=white];
+
+left [label =
+"pifo_left:
+if pkt.flow_id in finish_times:
+  p.start = max(virtual_time, finish_times[pkt.flow_id]);
+else:
+  p.start = virtual_time
+finish_times[pkt.flow_id] = p.start + p.len / p.weight;
+pkt.prio = p.start
+"
+fillcolor = white];
+
+right [label =
+"pifo_right:
+if pkt.flow_id in finish_times:
+  p.start = max(virtual_time, finish_times[pkt.flow_id]);
+else:
+  p.start = virtual_time
+finish_times[pkt.flow_id] = p.start + p.len / p.weight;
+pkt.prio = p.start
+"
+fillcolor = white];
+
+root -> left;
+root -> right;
+}
