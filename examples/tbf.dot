@@ -10,5 +10,5 @@ else :
 pkt.tokens = pkt.tokens - pkt.length
 last_arrival[pkt.flow_id] = pkt.arrival_time
 "
-fillcolor=white];
+fillcolor=green];
 }
