@@ -1,0 +1,8 @@
+digraph sched_graph {
+node [shape = box style="rounded,filled"];
+root [label =
+"pifo_root:
+pkt.prio = pkt.rem_flow_size
+"
+fillcolor=white];
+}
