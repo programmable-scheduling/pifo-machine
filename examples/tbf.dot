@@ -1,0 +1,14 @@
+digraph sched_graph {
+node [shape = box style="rounded,filled"];
+root [label =
+"pifo_root:
+tokens[pkt.flow_id] = min(tokens[pkt.flow_id] + r * (pkt.arrival_time - last_arrival[pkt.flow_id]), B)
+if (pkt.length <= tokens[pkt.flow_id]):
+  pkt.send_time = pkt.arrival_time
+else :
+  pkt.send_time = pkt.arrival_time + (pkt.length - pkt.tokens) / r
+pkt.tokens = pkt.tokens - pkt.length
+last_arrival[pkt.flow_id] = pkt.arrival_time
+"
+fillcolor=white];
+}
